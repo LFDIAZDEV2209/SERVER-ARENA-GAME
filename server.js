@@ -12,7 +12,21 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Cargar datos desde db.json
-const db = require('./data/db.json');
+let db;
+try {
+  // Intentar cargar desde la raíz del proyecto
+  db = require('./db.json');
+} catch (error) {
+  try {
+    // Si no está en la raíz, intentar desde la carpeta data
+    db = require('./data/db.json');
+  } catch (error2) {
+    console.error('No se pudo cargar el archivo db.json');
+    console.error('Error 1:', error.message);
+    console.error('Error 2:', error2.message);
+    process.exit(1);
+  }
+}
 
 // Rutas de la API
 
